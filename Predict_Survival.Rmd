@@ -1,0 +1,92 @@
+---
+title: 'Prediction: Titanic Survival'
+author: "FrannieK"
+date: "6 September 2016"
+output: pdf_document
+---
+
+#1. Define the question #
+Predict survival on the Titanic
+
+#2. Define the ideal data set# 
+Per given in Kaggle train set but with no missing values
+
+#3. Determine what data I can access #
+#4. Obtain the data #
+
+
+```{r package}
+library(xlsx)
+```
+
+```{r raw data}
+
+dir = "C:/Users/Huran/Desktop/Data_Project/Proj_Titanic"
+setwd(dir)
+set.seed(2016)
+
+tr = read.csv("Data/train.csv",header=TRUE, sep=",", na.strings =c("NA", "", " ")) # na.strings instructs what to interpre as missing values
+test = read.csv("Data/test.csv", header=TRUE, sep =",", na.strings = c("NA", "", " "))
+
+```
+ 
+#5. Clean the data # 
+First examine the raw data, get raw profile and find missing values.
+* Upon examining, found _Survived_, _Pclass_ are categorical hence need to change into factors.
+* Also performed the same to test data frame and added blank column for prediction later on.
+* _Age_, _Cabin_ and _Embarked_ have missing values which will be filled with median value, NA and mode value respectively.
+
+
+
+```{r clean data}
+str(tr) # gets structure
+str(test)
+ 
+tr$Survived = as.factor(tr$Survived) # convert class of object
+tr$Pclass = as.factor(tr$Pclass)
+
+test[,"Survived"] = NA # adds a blank column
+test$Pclass = as.factor(test$Pclass)
+
+summary(tr) # descriptive profile
+summary(test)
+
+colSums(apply(tr,2, function(x) is.na(x))) # locate missing values
+tr$Age[is.na(tr$Age)] = median(tr$Age[!is.na(tr$Age)]) # interchangeable with tr[["Age"]][n] or tr[,"Age"][n]
+tr$Embarked[is.na(tr$Embarked)] = "S"
+
+tr$Sex_ind = sapply(tr$Sex, function(x) if(x=="male") {1} else {2})
+tr$Emb_ind = sapply(tr$Embarked, function(x) if(x=="C") {1} else if (x=="Q") {2} else {3})
+
+test$Age[is.na(test$Age)] = median(test$Age[!is.na(test$Age)]) #do the same for test set 
+test$Embarked[is.na(test$Embarked)]="S"
+
+test$Sex_ind = sapply(test$Sex, function(x) if(x=="male") {1} else {2})
+test$Emb_ind = sapply(test$Embarked, function(x) if(x=="C") {1} else if (x=="Q") {2} else {3})
+
+
+write.csv(tr, file = "clean_data.csv", row.names=TRUE) # save clean train data in csv format
+write.xlsx(test, file="clean_test.xlsx", row.names=TRUE)
+
+```
+
+#6. Exploratory data analysis
+I'll take the clean data to SPSS for analytical steps. These include:
+* mean, median, mode
+* variance
+* scatter plot
+* hierachical clustering
+* k means clustering
+* principal component analysis
+* ANOVA 
+
+Features are as follows:
+# mean
+mean age is 30, 
+
+
+# variance
+
+...
+
+
