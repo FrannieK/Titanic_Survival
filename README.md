@@ -1,2 +1,2 @@
 # Titanic_Survival
-Predicting the passendar survival via linear discriminant analysis
+Predicting the passenger survival via linear discriminant analysis
